@@ -6,6 +6,7 @@
  * @link http://prestashop.modulez.ru/en/ Modules for Prestashop CMS
  * @author zapalm <zapalm@ya.ru>
  * @copyright (c) 2014, zapalm
+ * @link http://prestashop.modulez.ru/en/free-products/27-jivosite-live-chat.html The module's homepage
  * @license http://www.opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
