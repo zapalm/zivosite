@@ -1,13 +1,11 @@
 <?php
-
 /**
- * JivoSite Live Chat module for Prestashop
+ * JivoSite Live Chat: module for Prestashop 1.5-1.6
  *
- * @link http://prestashop.modulez.ru/en/ Modules for Prestashop CMS
  * @author zapalm <zapalm@ya.ru>
  * @copyright (c) 2014-2015, zapalm
  * @link http://prestashop.modulez.ru/en/free-products/27-jivosite-live-chat.html The module's homepage
- * @license http://www.opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
  */
 
 if (!defined('_PS_VERSION_'))
