@@ -21,7 +21,7 @@ class Zivosite extends Module
 		$this->author = 'zapalm';
 		$this->need_instance = 0;
 		$this->bootstrap = true;
-		$this->ps_versions_compliancy = array('min' => '1.5.0.0', 'max' => '1.6.1.0');
+		//$this->ps_versions_compliancy = array('min' => '1.5.0.0', 'max' => '1.6.1.0');
 
 		parent::__construct();
 
