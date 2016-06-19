@@ -13,6 +13,8 @@ if (!defined('_PS_VERSION_'))
 
 class Zivosite extends Module
 {
+	private $template = 'zivosite.tpl';
+
 	public function __construct()
 	{
 		$this->name = 'zivosite';
@@ -108,6 +110,8 @@ class Zivosite extends Module
 					}
 				}
 			}
+
+			Tools::clearCache(Context::getContext()->smarty, $this->getTemplatePath($this->template));
 		}
 
 		return $output.$this->displayForm();
@@ -242,15 +246,19 @@ class Zivosite extends Module
 
 	public function hookFooter($params)
 	{
-		$widget_id = Configuration::get('JIVOSITE_WIDGET_ID');
+		$cache_id = $this->getCacheId();
+		if (!$this->isCached($this->template, $cache_id))
+		{
+			$widget_id = Configuration::get('JIVOSITE_WIDGET_ID');
 
-		if (!$widget_id)
-			return null;
+			if (!$widget_id)
+				return null;
 
-		$this->context->smarty->assign(array(
-			'JIVOSITE_WIDGET_ID' => $widget_id
-		));
+			$this->context->smarty->assign(array(
+				'JIVOSITE_WIDGET_ID' => $widget_id
+			));
+		}
 
-		return $this->display(__FILE__, 'zivosite.tpl');
+		return $this->display(__FILE__, $this->template, $cache_id);
 	}
 }
