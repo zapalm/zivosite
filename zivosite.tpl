@@ -1,3 +1,12 @@
+{**
+ * JivoChat/JivoSite Live Chat: module for Prestashop 1.5-1.6
+ *
+ * @author    zapalm <zapalm@ya.ru>
+ * @copyright (c) 2014-2016, zapalm
+ * @link      http://prestashop.modulez.ru/en/free-products/27-jivosite-live-chat.html The module's homepage
+ * @license   http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
+*}
+
 <!-- BEGIN JIVOSITE CODE {literal} -->
 <script type='text/javascript'>
 (function(){ var widget_id = '{/literal}{$JIVOSITE_WIDGET_ID}{literal}';
