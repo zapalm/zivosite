@@ -19,7 +19,7 @@ class Zivosite extends Module
 	{
 		$this->name = 'zivosite';
 		$this->tab = 'front_office_features';
-		$this->version = '0.9.2';
+		$this->version = '0.9.3';
 		$this->author = 'zapalm';
 		$this->need_instance = 0;
 		$this->bootstrap = true;
@@ -57,6 +57,7 @@ class Zivosite extends Module
 	{
 		$output = '';
 		$submit_save = !empty($_POST['submit_save']); // Tools::isSubmit() method is unusable for PS1.5 when 'form helper' is using at this time
+		$iso_code = Language::getIsoById((int)$this->context->cookie->id_lang);
 
 		if ($submit_save)
 		{
@@ -70,7 +71,7 @@ class Zivosite extends Module
 					'userDisplayName' => Tools::getValue('JIVOSITE_USER_NAME'),
 					'siteUrl' => Tools::getValue('JIVOSITE_WIDGET_DOMAIN'),
 					'authToken' => self::generateGUID(),
-					'agent_id' => '4086',
+					'agent_id' => ($iso_code === 'ru' ? '7280' : '4086'),
 					'userPassword' => Tools::getValue('JIVOSITE_USER_PASSWD'),
 				);
 
@@ -119,6 +120,7 @@ class Zivosite extends Module
 
 	protected function displayForm()
 	{
+		$iso_code = Language::getIsoById((int)$this->context->cookie->id_lang);
 		$widget_id_exists = Configuration::get('JIVOSITE_WIDGET_ID') ? 1 : 0;
 		$fields_form = array();
 
@@ -231,7 +233,7 @@ class Zivosite extends Module
 		$form->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
 		$form->show_toolbar = false;
 		$form->submit_action = 'submit_save';
-		$form->fields_value['JIVOSITE_LOGIN'] = '<a target="_blank" class="" href="https://www.jivochat.com?pid=4086">www.jivochat.com</a>';
+		$form->fields_value['JIVOSITE_LOGIN'] = '<a target="_blank" href="'.($iso_code === 'ru' ? 'http://www.jivosite.ru?partner_id=7280' : 'https://www.jivochat.com?partner_id=4086').'">www.jivochat.com</a>';
 		$form->fields_value['JIVOSITE_WIDGET_ID'] = Configuration::get('JIVOSITE_WIDGET_ID');
 		$form->fields_value['JIVOSITE_WIDGET_ID_EXIST'] = $widget_id_exists;
 		$form->fields_value['JIVOSITE_USER_EMAIL'] = Tools::getValue('JIVOSITE_USER_EMAIL') ? Tools::getValue('JIVOSITE_USER_EMAIL') : Configuration::get('PS_SHOP_EMAIL');
