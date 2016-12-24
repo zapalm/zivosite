@@ -3,7 +3,7 @@ JivoSite Live Chat module for Prestashop
 
 Description
 ------------
-This is a module for [PrestaShop][4] e-commerce solution (v1.5-1.6) that allows to add JivoSite Live Chat to a shop.
+This is a module for [PrestaShop][4] e-commerce solution (v1.5-1.7) that allows to add JivoSite Live Chat to a shop.
 More info: http://prestashop.modulez.ru/en/free-products/27-jivosite-live-chat.html
 
 Installation & Update
