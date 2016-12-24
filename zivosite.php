@@ -13,16 +13,25 @@ if (!defined('_PS_VERSION_'))
 
 class Zivosite extends Module
 {
+	const CONF_USER_EMAIL          = 'JIVOSITE_USER_EMAIL';
+	const CONF_USER_PASSWORD       = 'JIVOSITE_USER_PASSWD';
+	const CONF_USER_NAME           = 'JIVOSITE_USER_NAME';
+	const CONF_WIDGET_DOMAIN       = 'JIVOSITE_WIDGET_DOMAIN';
+	const CONF_WIDGET_ID           = 'JIVOSITE_WIDGET_ID';
+	const CONF_AUTH_TOKEN          = 'JIVOSITE_AUTH_TOKEN';
+	const FORM_KEY_LOGIN_URL       = 'JIVOSITE_LOGIN';
+	const FROM_KEY_WIDGET_ID_EXIST = 'JIVOSITE_WIDGET_ID_EXIST';
+
 	private $template = 'zivosite.tpl';
 
 	public function __construct()
 	{
-		$this->name = 'zivosite';
-		$this->tab = 'front_office_features';
-		$this->version = '0.9.4';
-		$this->author = 'zapalm';
+		$this->name          = 'zivosite';
+		$this->tab           = 'front_office_features';
+		$this->version       = '0.9.4';
+		$this->author        = 'zapalm';
 		$this->need_instance = 0;
-		$this->bootstrap = true;
+		$this->bootstrap     = true;
 
 		parent::__construct();
 
@@ -41,37 +50,58 @@ class Zivosite extends Module
 	}
 
 	/*
-	 * generates GUID
+	 * Generates GUID.
 	 *
 	 * @link https://php.net/com_create_guid#99425
 	 *
 	 * return string
 	 */
-	private static function generateGUID()
+	private static function generateGuid()
 	{
 		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 	}
 
+	/**
+	 * Get good password that include's at list one number.
+	 *
+	 * @return string
+	 *
+	 * @throws PrestaShopException
+	 */
+	private function generatePassword()
+	{
+		do {
+			$password = Tools::passwdGen();
+
+			$containsNumbers = preg_match('/[0-9]/', $password);
+			if (false === $containsNumbers) {
+				throw new PrestaShopException('The function preg_match is failed.');
+			}
+		} while (0 === $containsNumbers);
+
+		return $password;
+	}
+
 	public function getContent()
 	{
-		$output = '';
+		$output      = '';
 		$submit_save = !empty($_POST['submit_save']); // Tools::isSubmit() method is unusable for PS1.5 when 'form helper' is using at this time
-		$iso_code = Language::getIsoById((int)$this->context->cookie->id_lang);
+		$isoCode    = Language::getIsoById((int)$this->context->cookie->id_lang);
 
 		if ($submit_save)
 		{
-			if (Tools::getValue('JIVOSITE_WIDGET_ID_EXIST') && Tools::getValue('JIVOSITE_WIDGET_ID'))
-				Configuration::updateValue('JIVOSITE_WIDGET_ID', Tools::getValue('JIVOSITE_WIDGET_ID'));
-			elseif (!Tools::getValue('JIVOSITE_WIDGET_ID_EXIST'))
+			if (Tools::getValue(self::FROM_KEY_WIDGET_ID_EXIST) && Tools::getValue(self::CONF_WIDGET_ID))
+				Configuration::updateValue(self::CONF_WIDGET_ID, Tools::getValue(self::CONF_WIDGET_ID));
+			elseif (!Tools::getValue(self::FROM_KEY_WIDGET_ID_EXIST))
 			{
 				$signin_params = array(
-					'email' => Tools::getValue('JIVOSITE_USER_EMAIL'),
-					'partnerId' => 'prestashop',
-					'userDisplayName' => Tools::getValue('JIVOSITE_USER_NAME'),
-					'siteUrl' => Tools::getValue('JIVOSITE_WIDGET_DOMAIN'),
-					'authToken' => self::generateGUID(),
-					'agent_id' => ($iso_code === 'ru' ? '7280' : '4086'),
-					'userPassword' => Tools::getValue('JIVOSITE_USER_PASSWD'),
+					'email'           => Tools::getValue(self::CONF_USER_EMAIL),
+					'partnerId'       => 'prestashop',
+					'userDisplayName' => Tools::getValue(self::CONF_USER_NAME),
+					'siteUrl'         => Tools::getValue(self::CONF_WIDGET_DOMAIN),
+					'authToken'       => self::generateGuid(),
+					'agent_id'        => ($isoCode === 'ru' ? '7280' : '4086'),
+					'userPassword'    => Tools::getValue(self::CONF_USER_PASSWORD),
 				);
 
 				$validated = true;
@@ -87,24 +117,24 @@ class Zivosite extends Module
 
 					$opts = array('http' =>
 						array(
-							'method' => 'POST',
-							'header' => 'Content-type: application/x-www-form-urlencoded',
+							'method'  => 'POST',
+							'header'  => 'Content-type: application/x-www-form-urlencoded',
 							'content' => $post_data
 						)
 					);
 
-					$context = stream_context_create($opts);
-
-					$post_result = file_get_contents('http://admin.jivosite.com/integration/install', false, $context);
-					if (strncmp($post_result, 'Error', 5) == 0)
+					$context     = stream_context_create($opts);
+					$postUrl     = 'http://admin.jivosite.com/integration/install/?lang=' . ('ru' === $isoCode ? 'ru' : 'en');
+					$postResult  = file_get_contents($postUrl, false, $context);
+					if (strncmp($postResult, 'Error', 5) === 0)
 					{
-						$post_result = str_replace('Error: ', '', $post_result);
-						$output .= $this->displayError($post_result);
+						$postResult = str_replace('Error: ', '', $postResult);
+						$output .= $this->displayError('JivoChat: ' . $postResult);
 					}
-					elseif (strlen($post_result))
+					elseif (strlen($postResult))
 					{
-						Configuration::updateValue('JIVOSITE_WIDGET_ID', $post_result);
-						Configuration::updateValue('JIVOSITE_AUTH_TOKEN', $signin_params['authToken']);
+						Configuration::updateValue(self::CONF_WIDGET_ID, $postResult);
+						Configuration::updateValue(self::CONF_AUTH_TOKEN, $signin_params['authToken']);
 
 						$output .= $this->displayConfirmation('The account successfully created');
 					}
@@ -119,33 +149,33 @@ class Zivosite extends Module
 
 	protected function displayForm()
 	{
-		$iso_code = Language::getIsoById((int)$this->context->cookie->id_lang);
-		$widget_id_exists = Configuration::get('JIVOSITE_WIDGET_ID') ? 1 : 0;
-		$fields_form = array();
+		$iso_code         = Language::getIsoById((int)$this->context->cookie->id_lang);
+		$widget_id_exists = Configuration::get(self::CONF_WIDGET_ID) ? 1 : 0;
+		$fields_form      = array();
 
 		$fields_form[] = array(
 			'form' => array(
 				'legend' => array(
 					'title' => $this->l('Configuration'),
-					'icon' => 'icon-cogs'
+					'icon'  => 'icon-cogs'
 				),
 				'input' => array(
 					array(
-						'type' => 'radio',
-						'label' => $this->l('Are you already have JivoSite Widget ID?'),
-						'name' => 'JIVOSITE_WIDGET_ID_EXIST',
-						'is_bool' => true,
+						'type'     => 'radio',
+						'label'    => $this->l('Are you already have JivoSite Widget ID?'),
+						'name'     => self::FROM_KEY_WIDGET_ID_EXIST,
+						'is_bool'  => true,
 						'required' => true,
-						'desc' => $this->l('Choose to continue the configuration.'),
-						'class' => 't',
-						'values' => array(
+						'desc'     => $this->l('Choose to continue the configuration.'),
+						'class'    => 't',
+						'values'   => array(
 							array(
-								'id' => 'widget_id_existence_on',
+								'id'    => 'widget_id_existence_on',
 								'value' => 1,
 								'label' => $this->l('Yes'),
 							),
 							array(
-								'id' => 'widget_id_existence_off',
+								'id'    => 'widget_id_existence_off',
 								'value' => 0,
 								'label' => $this->l('No')
 							)
@@ -159,22 +189,22 @@ class Zivosite extends Module
 			'form' => array(
 				'legend' => array(
 					'title' => $this->l('Setting JivoSite Widget ID or Log-In to JivoSite'),
-					'icon' => 'icon-cogs'
+					'icon'  => 'icon-cogs'
 				),
 				'input' => array(
 					array(
-						'type' => 'text',
-						'label' => $this->l('Your JivoSite Widget ID'),
-						'name' => 'JIVOSITE_WIDGET_ID',
+						'type'     => 'text',
+						'label'    => $this->l('Your JivoSite Widget ID'),
+						'name'     => self::CONF_WIDGET_ID,
 						'required' => false,
-						'desc' => $this->l('Copy your Widget ID from your JivoSite Code and insert here.'),
+						'desc'     => $this->l('Copy your Widget ID from your JivoSite Code and insert here.'),
 					),
 					array(
-						'type' => 'free',
-						'label' => $this->l('JivoSite admin URL'),
-						'name' => 'JIVOSITE_LOGIN',
+						'type'     => 'free',
+						'label'    => $this->l('JivoSite admin URL'),
+						'name'     => self::FORM_KEY_LOGIN_URL,
 						'required' => false,
-						'desc' => $this->l('Log-In to JivoSite admin panel.'),
+						'desc'     => $this->l('Log-In to JivoSite admin panel.'),
 					),
 				),
 				'submit' => array(
@@ -188,36 +218,36 @@ class Zivosite extends Module
 			'form' => array(
 				'legend' => array(
 					'title' => $this->l('Create new JivoSite account to get Widget ID'),
-					'icon' => 'icon-cogs'
+					'icon'  => 'icon-cogs'
 				),
 				'input' => array(
 					array(
-						'type' => 'text',
-						'label' => $this->l('E-mail'),
-						'name' => 'JIVOSITE_USER_EMAIL',
+						'type'     => 'text',
+						'label'    => $this->l('E-mail'),
+						'name'     => self::CONF_USER_EMAIL,
 						'required' => true,
-						'desc' => $this->l('Your E-mail that will be used to log-in to JivoSite.').' '.$this->l('Change if need and remember it please.'),
+						'desc'     => $this->l('Your E-mail that will be used to log-in to JivoSite.').' '.$this->l('Change if need and remember it please.'),
 					),
 					array(
-						'type' => 'text',
-						'label' => $this->l('Password'),
-						'name' => 'JIVOSITE_USER_PASSWD',
+						'type'     => 'text',
+						'label'    => $this->l('Password'),
+						'name'     => self::CONF_USER_PASSWORD,
 						'required' => true,
-						'desc' => $this->l('Your password that will be used to log-in to JivoSite.').' '.$this->l('Change if need and remember it please.'),
+						'desc'     => $this->l('Your password that will be used to log-in to JivoSite.').' '.$this->l('Change if need and remember it please.'),
 					),
 					array(
-						'type' => 'text',
-						'label' => $this->l('Manager name'),
-						'name' => 'JIVOSITE_USER_NAME',
+						'type'     => 'text',
+						'label'    => $this->l('Manager name'),
+						'name'     => self::CONF_USER_NAME,
 						'required' => true,
-						'desc' => $this->l('This name will be dislpayed in the chat.'),
+						'desc'     => $this->l('This name will be dislpayed in the chat.'),
 					),
 					array(
-						'type' => 'text',
-						'label' => $this->l('Shop domain'),
-						'name' => 'JIVOSITE_WIDGET_DOMAIN',
+						'type'     => 'text',
+						'label'    => $this->l('Shop domain'),
+						'name'     => self::CONF_WIDGET_DOMAIN,
 						'required' => true,
-						'desc' => $this->l('A domain on witch the widget will work.'),
+						'desc'     => $this->l('A domain on witch the widget will work.'),
 					),
 				),
 				'submit' => array(
@@ -228,17 +258,19 @@ class Zivosite extends Module
 		);
 
 		$form = new HelperForm();
-		$form->token = Tools::getAdminTokenLite('AdminModules');
-		$form->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
-		$form->show_toolbar = false;
+
+		$form->token         = Tools::getAdminTokenLite('AdminModules');
+		$form->currentIndex  = AdminController::$currentIndex.'&configure='.$this->name;
+		$form->show_toolbar  = false;
 		$form->submit_action = 'submit_save';
-		$form->fields_value['JIVOSITE_LOGIN'] = '<a target="_blank" href="'.($iso_code === 'ru' ? 'http://www.jivosite.ru?partner_id=7280' : 'https://www.jivochat.com?partner_id=4086').'">www.jivochat.com</a>';
-		$form->fields_value['JIVOSITE_WIDGET_ID'] = Configuration::get('JIVOSITE_WIDGET_ID');
-		$form->fields_value['JIVOSITE_WIDGET_ID_EXIST'] = $widget_id_exists;
-		$form->fields_value['JIVOSITE_USER_EMAIL'] = Tools::getValue('JIVOSITE_USER_EMAIL') ? Tools::getValue('JIVOSITE_USER_EMAIL') : Configuration::get('PS_SHOP_EMAIL');
-		$form->fields_value['JIVOSITE_WIDGET_DOMAIN'] = Tools::getValue('JIVOSITE_WIDGET_DOMAIN') ? Tools::getValue('JIVOSITE_WIDGET_DOMAIN') : Tools::getShopDomain(true);
-		$form->fields_value['JIVOSITE_USER_PASSWD'] = Tools::getValue('JIVOSITE_USER_PASSWD') ? Tools::getValue('JIVOSITE_USER_PASSWD') : Tools::passwdGen();
-		$form->fields_value['JIVOSITE_USER_NAME'] = Tools::getValue('JIVOSITE_USER_NAME') ? Tools::getValue('JIVOSITE_USER_NAME') : $this->context->employee->firstname.' '.$this->context->employee->lastname;
+
+		$form->fields_value[self::FORM_KEY_LOGIN_URL]        = '<a target="_blank" href="'.($iso_code === 'ru' ? 'http://www.jivosite.ru?partner_id=7280' : 'https://www.jivochat.com?partner_id=4086').'">www.jivochat.com</a>';
+		$form->fields_value[self::CONF_WIDGET_ID]           = Configuration::get(self::CONF_WIDGET_ID);
+		$form->fields_value[self::FROM_KEY_WIDGET_ID_EXIST] = $widget_id_exists;
+		$form->fields_value[self::CONF_USER_EMAIL]          = Tools::getValue(self::CONF_USER_EMAIL) ? Tools::getValue(self::CONF_USER_EMAIL) : Configuration::get('PS_SHOP_EMAIL');
+		$form->fields_value[self::CONF_WIDGET_DOMAIN]       = Tools::getValue(self::CONF_WIDGET_DOMAIN) ? Tools::getValue(self::CONF_WIDGET_DOMAIN) : Tools::getShopDomain(true);
+		$form->fields_value[self::CONF_USER_PASSWORD]       = Tools::getValue(self::CONF_USER_PASSWORD) ? Tools::getValue(self::CONF_USER_PASSWORD) : $this->generatePassword();
+		$form->fields_value[self::CONF_USER_NAME]           = Tools::getValue(self::CONF_USER_NAME) ? Tools::getValue(self::CONF_USER_NAME) : $this->context->employee->firstname.' '.$this->context->employee->lastname;
 
 		$this->context->controller->addJS($this->_path.'js/admin_zivosite.js');
 
@@ -250,13 +282,13 @@ class Zivosite extends Module
 		$cache_id = $this->getCacheId();
 		if (!$this->isCached($this->template, $cache_id))
 		{
-			$widget_id = Configuration::get('JIVOSITE_WIDGET_ID');
+			$widget_id = Configuration::get(self::CONF_WIDGET_ID);
 
 			if (!$widget_id)
 				return null;
 
 			$this->context->smarty->assign(array(
-				'JIVOSITE_WIDGET_ID' => $widget_id
+				self::CONF_WIDGET_ID => $widget_id
 			));
 		}
 
