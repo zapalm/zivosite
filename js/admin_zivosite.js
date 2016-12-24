@@ -8,28 +8,33 @@
  */
 
 $(document).ready(function() {
-	if ($('#widget_id_existence_off').val() == 1)
-		showAutoRegOptions(false);
-	else
-		showAutoRegOptions(true);
 
-	$('#widget_id_existence_off').click(function() {
-		showAutoRegOptions(false);
+	var $checkboxOn  = $('#widget_id_existence_on');
+	var $checkboxOff = $('#widget_id_existence_off');
+
+	toggleAutoRegForm($checkboxOff.prop('checked'));
+
+	$checkboxOff.click(function() {
+		toggleAutoRegForm(true);
 	});
 
-	$('#widget_id_existence_on').click(function() {
-		showAutoRegOptions(true);
+	$checkboxOn.click(function() {
+		toggleAutoRegForm(false);
 	});
 });
 
-function showAutoRegOptions(param)
+function toggleAutoRegForm(show)
 {
-	if (param) {
-		$('#fieldset_1_1').show();
-		$('#fieldset_2_2').hide();
+	var $fieldsets        = $('[id*="fieldset_"]');
+	var $fieldsetWidgetId = $($fieldsets.get(1));
+	var $fieldsetAutoReg  = $($fieldsets.get(2));
+
+	if (show) {
+		$fieldsetWidgetId.hide();
+		$fieldsetAutoReg.show();
 	}
 	else {
-		$('#fieldset_1_1').hide();
-		$('#fieldset_2_2').show();
+		$fieldsetWidgetId.show();
+		$fieldsetAutoReg.hide();
 	}
 }

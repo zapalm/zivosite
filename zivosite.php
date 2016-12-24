@@ -141,7 +141,7 @@ class Zivosite extends Module
 						'values' => array(
 							array(
 								'id' => 'widget_id_existence_on',
-								'value' => $widget_id_exists,
+								'value' => 1,
 								'label' => $this->l('Yes'),
 							),
 							array(
