@@ -140,8 +140,6 @@ class Zivosite extends Module
 					}
 				}
 			}
-
-			Tools::clearCache(Context::getContext()->smarty, $this->getTemplatePath($this->template));
 		}
 
 		return $output.$this->displayForm();
@@ -277,21 +275,23 @@ class Zivosite extends Module
 		return $form->generateForm($fields_form);
 	}
 
-	public function hookFooter($params)
-	{
-		$cache_id = $this->getCacheId();
-		if (!$this->isCached($this->template, $cache_id))
-		{
-			$widget_id = Configuration::get(self::CONF_WIDGET_ID);
+    /**
+     * @inheritdoc
+     */
+    public function hookFooter($params)
+    {
+        $widgetId = trim(Configuration::get(self::CONF_WIDGET_ID));
+        if ('' === $widgetId) {
+            return '';
+        }
 
-			if (!$widget_id)
-				return null;
+        $cacheId = $this->getCacheId($this->name . '|' . $widgetId);
+        if (!$this->isCached($this->template, $cacheId)) {
+            $this->context->smarty->assign(array(
+                self::CONF_WIDGET_ID => $widgetId,
+            ));
+        }
 
-			$this->context->smarty->assign(array(
-				self::CONF_WIDGET_ID => $widget_id
-			));
-		}
-
-		return $this->display(__FILE__, $this->template, $cache_id);
-	}
+        return $this->display(__FILE__, $this->template, $cacheId);
+    }
 }
