@@ -1,17 +1,22 @@
 <?php
 /**
- * JivoChat/JivoSite Live Chat: module for Prestashop 1.5-1.7
+ * JivoChat/JivoSite Live Chat: module for PrestaShop.
  *
- * @author    zapalm <zapalm@ya.ru>
- * @copyright (c) 2014, zapalm
- * @link      http://prestashop.modulez.ru/en/free-products/27-jivosite-live-chat.html The module's homepage
- * @license   http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
+ * @author    Maksim T. <zapalm@yandex.com>
+ * @copyright 2014 Maksim T.
+ * @link      https://prestashop.modulez.ru/en/frontend-features/27-jivosite-live-chat.html The module's homepage
+ * @license   https://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
  */
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+/**
+ * @inheritdoc
+ *
+ * @author Maksim T. <zapalm@yandex.com>
+ */
 class Zivosite extends Module
 {
     const CONF_USER_EMAIL          = 'JIVOSITE_USER_EMAIL';
@@ -23,8 +28,14 @@ class Zivosite extends Module
     const FORM_KEY_LOGIN_URL       = 'JIVOSITE_LOGIN';
     const FROM_KEY_WIDGET_ID_EXIST = 'JIVOSITE_WIDGET_ID_EXIST';
 
+    /** @var string The template of the widget */
     private $template = 'zivosite.tpl';
 
+    /**
+     * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
+     */
     public function __construct()
     {
         $this->name          = 'zivosite';
@@ -40,35 +51,58 @@ class Zivosite extends Module
         $this->description = $this->l('Allow to add JivoSite Live Chat.');
     }
 
+    /**
+     * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
+     */
     public function install()
     {
         return parent::install() && $this->registerHook('footer');
     }
 
+    /**
+     * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
+     */
     public function uninstall()
     {
         return parent::uninstall();
     }
 
-    /*
-     * Generates GUID.
+    /**
+     * Generates a GUID.
+     *
+     * @return string
      *
      * @link https://php.net/com_create_guid#99425
      *
-     * return string
+     * @author Maksim T. <zapalm@yandex.com>
      */
     private static function generateGuid()
     {
-        return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535),
-            mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+        return sprintf(
+            '%04X%04X-%04X-%04X-%04X-%04X%04X%04X',
+            mt_rand(0, 65535),
+            mt_rand(0, 65535),
+            mt_rand(0, 65535),
+            mt_rand(16384, 20479),
+            mt_rand(32768, 49151),
+            mt_rand(0, 65535),
+            mt_rand(0, 65535),
+            mt_rand(0, 65535)
+        );
     }
 
     /**
-     * Get good password that include's at list one number.
+     * Generates a good password with at least one number.
      *
      * @return string
      *
      * @throws PrestaShopException
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
     private function generatePassword()
     {
@@ -84,6 +118,11 @@ class Zivosite extends Module
         return $password;
     }
 
+    /**
+     * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
+     */
     public function getContent()
     {
         $output      = '';
@@ -144,6 +183,13 @@ class Zivosite extends Module
         return $output . $this->displayForm();
     }
 
+    /**
+     * Renders the settings form.
+     *
+     * @return string
+     *
+     * @author Maksim T. <zapalm@yandex.com>
+     */
     protected function displayForm()
     {
         $iso_code         = Language::getIsoById((int)$this->context->cookie->id_lang);
@@ -276,6 +322,8 @@ class Zivosite extends Module
 
     /**
      * @inheritdoc
+     *
+     * @author Maksim T. <zapalm@yandex.com>
      */
     public function hookFooter($params)
     {
