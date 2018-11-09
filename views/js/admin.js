@@ -1,5 +1,5 @@
 /**
- * JivoChat/JivoSite Live Chat: module for PrestaShop.
+ * JivoSite live chat: the module for PrestaShop.
  *
  * @author    Maksim T. <zapalm@yandex.com>
  * @copyright 2014 Maksim T.

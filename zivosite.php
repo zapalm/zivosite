@@ -1,6 +1,6 @@
 <?php
 /**
- * JivoChat/JivoSite Live Chat: module for PrestaShop.
+ * JivoSite live chat: the module for PrestaShop.
  *
  * @author    Maksim T. <zapalm@yandex.com>
  * @copyright 2014 Maksim T.
@@ -47,8 +47,8 @@ class Zivosite extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('JivoSite Live Chat');
-        $this->description = $this->l('Allow to add JivoSite Live Chat.');
+        $this->displayName = $this->l('JivoSite live chat');
+        $this->description = $this->l('Adds JivoSite live chat to a shop.');
     }
 
     /**
@@ -169,7 +169,7 @@ class Zivosite extends Module
                     $postResult = file_get_contents($postUrl, false, $context);
                     if (strncmp($postResult, 'Error', 5) === 0) {
                         $postResult = str_replace('Error: ', '', $postResult);
-                        $output     .= $this->displayError('JivoChat: ' . $postResult);
+                        $output     .= $this->displayError('JivoSite: ' . $postResult);
                     } elseif (strlen($postResult)) {
                         Configuration::updateValue(self::CONF_WIDGET_ID, $postResult);
                         Configuration::updateValue(self::CONF_AUTH_TOKEN, $signin_params['authToken']);

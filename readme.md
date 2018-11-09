@@ -1,8 +1,8 @@
-JivoChat / JivoSite live chat: the module for PrestaShop
+JivoSite live chat: the module for PrestaShop
 ======
 
 ## Description
-**The module adds [JivoChat / JivoSite live chat][6] to a shop.**
+**The module adds [JivoSite live chat][6] to a shop.**
 
 **Module's homepage: [prestashop.modulez.ru][4]** (full description and download).
 
