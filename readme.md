@@ -1,31 +1,53 @@
-JivoSite Live Chat module for Prestashop
+JivoChat / JivoSite live chat: the module for PrestaShop
 ======
 
-Description
-------------
-This is a module for [PrestaShop][4] e-commerce solution (v1.5-1.7) that allows to add [JivoSite Live Chat][5] to a shop.
-More info: http://prestashop.modulez.ru/en/free-products/27-jivosite-live-chat.html
+## Description
+**The module adds [JivoChat / JivoSite live chat][6] to a shop.**
 
-Installation & Update
-------------
-The module has a normal installation.
+**Module's homepage: [prestashop.modulez.ru][4]** (full description and download).
 
-To update the module just do this:
- - click uninstall button
- - remove all files from "/modules/zivosite/"
- - copy new files to the same directory
- - and click install button
+## Installation & Update
+The module has a normal installation and update (as usual, no extra knowledge needed).
 
-Contributing
-------------
-This is an open-source module licensed under Academic Free License (AFL 3.0).
-To contribute to this project, you should make pull requests to the development branch.
-If you need some help to make a [pull-request][1].
-All contributions must respect [the coding norm][2] and [the commit norm][3] in your pull-request.
-All files that you commit in your pull request must have Academic Free License (AFL 3.0).
+## How to help the project grow and get updates
+* **Become the [patron][5]** to help me work more for supporting and improving this module.
+* Report an issue.
+* Translate description of the module and it's interface captions.
+* Give me feedback.
+* Give the star to the project.
+* Contribute to the code.
 
-[1]: https://help.github.com/articles/using-pull-requests/
-[2]: http://doc.prestashop.com/display/PS15/Coding+Standards
-[3]: http://doc.prestashop.com/display/PS15/How+to+write+a+commit+message
-[4]: http://prestashop.com/
-[5]: https://www.jivochat.com/?partner_id=4086
+## Contributing to the code
+
+### Requirements for code contributors 
+
+Contributors **must** follow the following rules:
+
+* **Make your Pull Request on the *dev* branch**, NOT the *master* branch.
+* Do not update the module's version number.
+* Follow [the coding standards][1] and the [commit message norm][2] **(it is not mandatory for this project to add code prefix for a commit message)**.
+
+### Process in details for code contributors
+
+Contributors wishing to edit a module's files should follow the following process:
+
+1. Create your GitHub account, if you do not have one already.
+2. Fork the project to your GitHub account.
+3. Clone your fork to your local machine in the ```/modules``` directory of your PrestaShop installation.
+4. Create a branch in your local clone of the module for your changes.
+5. Change the files in your branch. Be sure to follow [the coding standards][1].
+6. Push your changed branch to your fork in your GitHub account.
+7. Create a pull request for your changes **on the *dev* branch** of the module's project. 
+   Be sure to follow [the commit message norm][2] in your pull request
+   **(it is not mandatory for this project to add code prefix for a commit message)**.
+   If you need help to make a pull request, read the [Github help page about creating pull requests][3].
+8. Wait for the module's maintainer to apply your changes.
+
+**Do not hesitate to create a pull request if even it's hard for you to apply all contributing rules.**
+
+[1]: http://doc.prestashop.com/display/PS16/Coding+Standards
+[2]: http://doc.prestashop.com/display/PS16/How+to+write+a+commit+message
+[3]: https://help.github.com/articles/using-pull-requests
+[4]: https://prestashop.modulez.ru/en/frontend-features/27-jivosite-live-chat.html
+[5]: https://www.patreon.com/zapalm
+[6]: https://www.jivochat.com/?partner_id=4086
