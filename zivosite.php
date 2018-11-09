@@ -29,7 +29,7 @@ class Zivosite extends Module
     const FROM_KEY_WIDGET_ID_EXIST = 'JIVOSITE_WIDGET_ID_EXIST';
 
     /** @var string The template of the widget */
-    private $template = 'zivosite.tpl';
+    private $template = 'footer.tpl';
 
     /**
      * @inheritdoc
@@ -315,7 +315,7 @@ class Zivosite extends Module
         $form->fields_value[self::CONF_USER_PASSWORD]       = Tools::getValue(self::CONF_USER_PASSWORD) ? Tools::getValue(self::CONF_USER_PASSWORD) : $this->generatePassword();
         $form->fields_value[self::CONF_USER_NAME]           = Tools::getValue(self::CONF_USER_NAME) ? Tools::getValue(self::CONF_USER_NAME) : $this->context->employee->firstname . ' ' . $this->context->employee->lastname;
 
-        $this->context->controller->addJS($this->_path . 'js/admin_zivosite.js');
+        $this->context->controller->addJS($this->_path . 'views/js/admin.js');
 
         $output = $form->generateForm($fields_form);
 
@@ -367,6 +367,6 @@ class Zivosite extends Module
             ));
         }
 
-        return $this->display(__FILE__, $this->template, $cacheId);
+        return $this->display(__FILE__, 'views/templates/hook/' . $this->template, $cacheId);
     }
 }
