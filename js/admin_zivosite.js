@@ -7,34 +7,32 @@
  * @license   http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
  */
 
-$(document).ready(function() {
+$(document).ready(function () {
+    var $checkboxOn = $('#widget_id_existence_on');
+    var $checkboxOff = $('#widget_id_existence_off');
 
-	var $checkboxOn  = $('#widget_id_existence_on');
-	var $checkboxOff = $('#widget_id_existence_off');
+    toggleAutoRegForm($checkboxOff.prop('checked'));
 
-	toggleAutoRegForm($checkboxOff.prop('checked'));
+    $checkboxOff.click(function () {
+        toggleAutoRegForm(true);
+    });
 
-	$checkboxOff.click(function() {
-		toggleAutoRegForm(true);
-	});
-
-	$checkboxOn.click(function() {
-		toggleAutoRegForm(false);
-	});
+    $checkboxOn.click(function () {
+        toggleAutoRegForm(false);
+    });
 });
 
-function toggleAutoRegForm(show)
-{
-	var $fieldsets        = $('[id*="fieldset_"]');
-	var $fieldsetWidgetId = $($fieldsets.get(1));
-	var $fieldsetAutoReg  = $($fieldsets.get(2));
+function toggleAutoRegForm(show) {
+    var $fieldsets = $('[id*="fieldset_"]');
+    var $fieldsetWidgetId = $($fieldsets.get(1));
+    var $fieldsetAutoReg = $($fieldsets.get(2));
 
-	if (show) {
-		$fieldsetWidgetId.hide();
-		$fieldsetAutoReg.show();
-	}
-	else {
-		$fieldsetWidgetId.show();
-		$fieldsetAutoReg.hide();
-	}
+    if (show) {
+        $fieldsetWidgetId.hide();
+        $fieldsetAutoReg.show();
+    }
+    else {
+        $fieldsetWidgetId.show();
+        $fieldsetAutoReg.hide();
+    }
 }
