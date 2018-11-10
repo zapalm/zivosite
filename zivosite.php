@@ -38,12 +38,15 @@ class Zivosite extends Module
      */
     public function __construct()
     {
-        $this->name          = 'zivosite';
-        $this->tab           = 'front_office_features';
-        $this->version       = '1.0.0';
-        $this->author        = 'zapalm';
-        $this->need_instance = 0;
-        $this->bootstrap     = true;
+        $this->name                   = 'zivosite';
+        $this->tab                    = 'front_office_features';
+        $this->version                = '1.0.0';
+        $this->author                 = 'zapalm';
+        $this->need_instance          = false;
+        $this->bootstrap              = true;
+        $this->module_key             = '';
+        $this->author_address         = '0x7ed2b1129c17640127da45bf157b8e445bdf711e';
+        $this->ps_versions_compliancy = ['min' => '1.5.0.1', 'max' => '1.7.4.4'];
 
         parent::__construct();
 
@@ -126,7 +129,7 @@ class Zivosite extends Module
     public function getContent()
     {
         $output      = '';
-        $submit_save = !empty($_POST['submit_save']); // Tools::isSubmit() method is unusable for PS1.5 when 'form helper' is using at this time
+        $submit_save = (bool)Tools::getValue('submit_save');
         $isoCode     = Language::getIsoById((int)$this->context->cookie->id_lang);
 
         if ($submit_save) {
@@ -166,7 +169,7 @@ class Zivosite extends Module
 
                     $context    = stream_context_create($opts);
                     $postUrl    = 'http://admin.jivosite.com/integration/install/?lang=' . ('ru' === $isoCode ? 'ru' : 'en');
-                    $postResult = file_get_contents($postUrl, false, $context);
+                    $postResult = Tools::file_get_contents($postUrl, false, $context);
                     if (strncmp($postResult, 'Error', 5) === 0) {
                         $postResult = str_replace('Error: ', '', $postResult);
                         $output     .= $this->displayError('JivoSite: ' . $postResult);
@@ -252,8 +255,8 @@ class Zivosite extends Module
                 ),
                 'submit' => array(
                     'title' => $this->l('Save'),
-                    'class' => 'button'
-                )
+                    'class' => 'button btn btn-default',
+                ),
             ),
         );
 
@@ -295,8 +298,8 @@ class Zivosite extends Module
                 ),
                 'submit' => array(
                     'title' => $this->l('Create'),
-                    'class' => 'button'
-                )
+                    'class' => 'button btn btn-default',
+                ),
             ),
         );
 
