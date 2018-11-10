@@ -58,7 +58,7 @@ class Zivosite extends Module
      */
     public function install()
     {
-        return parent::install() && $this->registerHook('footer');
+        return parent::install() && $this->registerHook('displayFooter');
     }
 
     /**
@@ -353,7 +353,7 @@ class Zivosite extends Module
      *
      * @author Maksim T. <zapalm@yandex.com>
      */
-    public function hookFooter($params)
+    public function hookDisplayFooter($params)
     {
         $widgetId = trim(Configuration::get(self::CONF_WIDGET_ID));
         if ('' === $widgetId) {
