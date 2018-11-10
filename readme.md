@@ -4,10 +4,8 @@ JivoSite live chat: the module for PrestaShop
 ## Description
 **The module adds [JivoSite live chat][6] to a shop.**
 
-**Module's homepage: [prestashop.modulez.ru][4]** (full description and download).
-
-## Installation & Update
-The module has a normal installation and update (as usual, no extra knowledge needed).
+**The module home page and the support page: [prestashop.modulez.ru][4].**
+The full description and a download of a stable version are available there.
 
 ## How to help the project grow and get updates
 * **Become the [patron][5]** to help me work more for supporting and improving this module.
