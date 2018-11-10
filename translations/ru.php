@@ -2,8 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{zivosite}prestashop>zivosite_1e2a274b4ce9d74fa8c90cf95a881422'] = 'Онлайн-чат JivoSite';
-$_MODULE['<{zivosite}prestashop>zivosite_097cb0d3c9769840fd7830d9a3f7c7b2'] = 'Добавляет на сайт онлайн-чат JivoSite.';
+$_MODULE['<{zivosite}prestashop>zivosite_1de262921866b8801e84ae99056719d1'] = 'JivoSite онлайн-чат';
+$_MODULE['<{zivosite}prestashop>zivosite_70c68e6c92e831dd31c06c1dd6211766'] = 'Добавляет онлайн-чат JivoSite в интернет-магазин.';
 $_MODULE['<{zivosite}prestashop>zivosite_5cc8c373b6ae083255d7e1b74b00014a'] = 'Пожалуйста, заполните обязательные поля';
 $_MODULE['<{zivosite}prestashop>zivosite_254f642527b45bc260048e30704edb39'] = 'Настройка';
 $_MODULE['<{zivosite}prestashop>zivosite_c9e42c888bc7539783af423d2a1f6ced'] = 'У вас уже есть ID виджета JivoSite?';
