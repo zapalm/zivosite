@@ -1,1 +1,4 @@
-/config*.xml
+config*.xml
+.gitignore
+composer.lock
+vendor
