@@ -169,8 +169,11 @@ class Zivosite extends Module
                             )
                     );
 
-                    $context    = stream_context_create($opts);
-                    $postUrl    = 'http://admin.jivosite.com/integration/install/?lang=' . ('ru' === $isoCode ? 'ru' : 'en');
+                    $localizations      = array('ru', 'tr', 'es', 'de', 'id', 'br');
+                    $appLanguageIsoCode = (in_array($isoCode, $localizations) ? $isoCode : 'en');
+                    $context            = stream_context_create($opts);
+                    $postUrl            = 'https://admin.jivosite.com/integration/install/?lang=' . $appLanguageIsoCode;
+
                     $postResult = Tools::file_get_contents($postUrl, false, $context);
                     if (strncmp($postResult, 'Error', 5) === 0) {
                         $postResult = str_replace('Error: ', '', $postResult);
@@ -179,7 +182,7 @@ class Zivosite extends Module
                         Configuration::updateValue(self::CONF_WIDGET_ID, $postResult);
                         Configuration::updateValue(self::CONF_AUTH_TOKEN, $signin_params['authToken']);
 
-                        $output .= $this->displayConfirmation('The account successfully created');
+                        $output .= $this->displayConfirmation($this->l('The account successfully created.'));
                     }
                 }
             }
