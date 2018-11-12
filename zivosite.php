@@ -33,6 +33,12 @@ class Zivosite extends Module
     /** @var string The template of the widget */
     private $template = 'footer.tpl';
 
+    /** @var string[] Default configuration */
+    private $confDefault = array(
+        self::CONF_WIDGET_ID  => '',
+        self::CONF_AUTH_TOKEN => '',
+    );
+
     /**
      * @inheritdoc
      *
@@ -63,7 +69,15 @@ class Zivosite extends Module
      */
     public function install()
     {
-        return parent::install() && $this->registerHook('displayFooter');
+        if (!parent::install()) {
+            return false;
+        }
+
+        foreach ($this->confDefault as $confName => $confValue) {
+            Configuration::updateValue($confName, $confValue);
+        }
+
+        return $this->registerHook('displayFooter');
     }
 
     /**
@@ -73,7 +87,15 @@ class Zivosite extends Module
      */
     public function uninstall()
     {
-        return parent::uninstall();
+        if (!parent::uninstall()) {
+            return false;
+        }
+
+        foreach (array_keys($this->confDefault) as $confName) {
+            Configuration::deleteByName($confName);
+        }
+
+        return true;
     }
 
     /**
