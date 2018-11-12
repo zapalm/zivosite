@@ -200,7 +200,6 @@ class Zivosite extends Module
      */
     protected function displayForm()
     {
-        $iso_code         = Language::getIsoById((int)$this->context->cookie->id_lang);
         $widget_id_exists = Configuration::get(self::CONF_WIDGET_ID) ? 1 : 0;
         $fields_form      = array();
 
@@ -315,7 +314,7 @@ class Zivosite extends Module
         $form->show_toolbar  = false;
         $form->submit_action = 'submit_save';
 
-        $form->fields_value[self::FORM_KEY_LOGIN_URL]       = '<a target="_blank" href="' . ($iso_code === 'ru' ? 'http://www.jivosite.ru?partner_id=7280' : 'https://www.jivochat.com?partner_id=4086') . '">www.jivochat.com</a>';
+        $form->fields_value[self::FORM_KEY_LOGIN_URL]       = $this->getLoginLink();
         $form->fields_value[self::CONF_WIDGET_ID]           = Configuration::get(self::CONF_WIDGET_ID);
         $form->fields_value[self::FROM_KEY_WIDGET_ID_EXIST] = $widget_id_exists;
         $form->fields_value[self::CONF_USER_EMAIL]          = Tools::getValue(self::CONF_USER_EMAIL) ? Tools::getValue(self::CONF_USER_EMAIL) : Configuration::get('PS_SHOP_EMAIL');
@@ -332,6 +331,23 @@ class Zivosite extends Module
         ;
 
         return $output;
+    }
+
+    /**
+     * Returns the login URL.
+     *
+     * @return string
+     *
+     * @author Maksim T. <zapalm@yandex.com>
+     */
+    private function getLoginLink()
+    {
+        $isoCode = Language::getIsoById((int)$this->context->cookie->id_lang);
+        $url     = ($isoCode === 'ru' ? 'https://www.jivosite.ru/?partner_id=7280' : 'https://www.jivochat.com/?partner_id=4086');
+        $domain  = ($isoCode === 'ru' ? 'www.jivosite.ru' : 'www.jivochat.com');
+        $link    = '<a href="' . $url . '" target="_blank" rel="noopener noreferrer">' . $domain . '</a>';
+
+        return $link;
     }
 
     /**
