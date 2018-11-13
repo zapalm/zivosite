@@ -153,14 +153,14 @@ class Zivosite extends Module
     public function getContent()
     {
         $output      = '';
-        $submit_save = (bool)Tools::getValue('submit_save');
+        $submitSave  = (bool)Tools::getValue('submit_save');
         $isoCode     = Language::getIsoById((int)$this->context->cookie->id_lang);
 
-        if ($submit_save) {
+        if ($submitSave) {
             if (Tools::getValue(self::FROM_KEY_WIDGET_ID_EXIST) && Tools::getValue(self::CONF_WIDGET_ID)) {
                 Configuration::updateValue(self::CONF_WIDGET_ID, Tools::getValue(self::CONF_WIDGET_ID));
             } elseif (!Tools::getValue(self::FROM_KEY_WIDGET_ID_EXIST)) {
-                $signin_params = array(
+                $signInParams = array(
                     'email'           => Tools::getValue(self::CONF_USER_EMAIL),
                     'partnerId'       => 'prestashop',
                     'userDisplayName' => Tools::getValue(self::CONF_USER_NAME),
@@ -171,7 +171,7 @@ class Zivosite extends Module
                 );
 
                 $validated = true;
-                foreach ($signin_params as $param) {
+                foreach ($signInParams as $param) {
                     if (empty($param)) {
                         $validated = false;
                     }
@@ -180,14 +180,14 @@ class Zivosite extends Module
                 if (!$validated) {
                     $output .= $this->displayError($this->l('Please, fill out required fields'));
                 } else {
-                    $post_data = http_build_query($signin_params);
+                    $postData = http_build_query($signInParams);
 
                     $opts = array(
                         'http' =>
                             array(
                                 'method'  => 'POST',
                                 'header'  => 'Content-type: application/x-www-form-urlencoded',
-                                'content' => $post_data
+                                'content' => $postData
                             )
                     );
 
@@ -202,7 +202,7 @@ class Zivosite extends Module
                         $output     .= $this->displayError('JivoSite: ' . $postResult);
                     } elseif (strlen($postResult)) {
                         Configuration::updateValue(self::CONF_WIDGET_ID, $postResult);
-                        Configuration::updateValue(self::CONF_AUTH_TOKEN, $signin_params['authToken']);
+                        Configuration::updateValue(self::CONF_AUTH_TOKEN, $signInParams['authToken']);
 
                         $output .= $this->displayConfirmation($this->l('The account successfully created.'));
                     }
