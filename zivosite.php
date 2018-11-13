@@ -21,12 +21,12 @@ require_once _PS_MODULE_DIR_ . 'zivosite/vendor/autoload.php';
  */
 class Zivosite extends Module
 {
-    const CONF_USER_EMAIL          = 'JIVOSITE_USER_EMAIL';
-    const CONF_USER_PASSWORD       = 'JIVOSITE_USER_PASSWD';
-    const CONF_USER_NAME           = 'JIVOSITE_USER_NAME';
-    const CONF_WIDGET_DOMAIN       = 'JIVOSITE_WIDGET_DOMAIN';
     const CONF_WIDGET_ID           = 'JIVOSITE_WIDGET_ID';
     const CONF_AUTH_TOKEN          = 'JIVOSITE_AUTH_TOKEN';
+    const FROM_KEY_USER_EMAIL      = 'JIVOSITE_USER_EMAIL';
+    const FROM_KEY_USER_PASSWORD   = 'JIVOSITE_USER_PASSWD';
+    const FROM_KEY_USER_NAME       = 'JIVOSITE_USER_NAME';
+    const FROM_KEY_WIDGET_DOMAIN   = 'JIVOSITE_WIDGET_DOMAIN';
     const FORM_KEY_LOGIN_URL       = 'JIVOSITE_LOGIN';
     const FROM_KEY_WIDGET_ID_EXIST = 'JIVOSITE_WIDGET_ID_EXIST';
 
@@ -161,13 +161,13 @@ class Zivosite extends Module
                 Configuration::updateValue(self::CONF_WIDGET_ID, Tools::getValue(self::CONF_WIDGET_ID));
             } elseif (!Tools::getValue(self::FROM_KEY_WIDGET_ID_EXIST)) {
                 $signInParams = array(
-                    'email'           => Tools::getValue(self::CONF_USER_EMAIL),
+                    'email'           => Tools::getValue(self::FROM_KEY_USER_EMAIL),
                     'partnerId'       => 'prestashop',
-                    'userDisplayName' => Tools::getValue(self::CONF_USER_NAME),
-                    'siteUrl'         => Tools::getValue(self::CONF_WIDGET_DOMAIN),
+                    'userDisplayName' => Tools::getValue(self::FROM_KEY_USER_NAME),
+                    'siteUrl'         => Tools::getValue(self::FROM_KEY_WIDGET_DOMAIN),
                     'authToken'       => self::generateGuid(),
                     'agent_id'        => ($isoCode === 'ru' ? '7280' : '4086'),
-                    'userPassword'    => Tools::getValue(self::CONF_USER_PASSWORD),
+                    'userPassword'    => Tools::getValue(self::FROM_KEY_USER_PASSWORD),
                 );
 
                 $validated = true;
@@ -286,7 +286,7 @@ class Zivosite extends Module
             ),
         );
 
-        $fields_form[] = array(
+        $fields_form[]                                    = array(
             'form' => array(
                 'legend' => array(
                     'title' => $this->l('Create new JivoSite account to get Widget ID'),
@@ -296,28 +296,28 @@ class Zivosite extends Module
                     array(
                         'type'     => 'text',
                         'label'    => $this->l('E-mail'),
-                        'name'     => self::CONF_USER_EMAIL,
+                        'name'     => self::FROM_KEY_USER_EMAIL,
                         'required' => true,
                         'desc'     => $this->l('Your E-mail that will be used to log-in to JivoSite.') . ' ' . $this->l('Change if need and remember it please.'),
                     ),
                     array(
                         'type'     => 'text',
                         'label'    => $this->l('Password'),
-                        'name'     => self::CONF_USER_PASSWORD,
+                        'name'     => self::FROM_KEY_USER_PASSWORD,
                         'required' => true,
                         'desc'     => $this->l('Your password that will be used to log-in to JivoSite.') . ' ' . $this->l('Change if need and remember it please.'),
                     ),
                     array(
                         'type'     => 'text',
                         'label'    => $this->l('Manager name'),
-                        'name'     => self::CONF_USER_NAME,
+                        'name'     => self::FROM_KEY_USER_NAME,
                         'required' => true,
                         'desc'     => $this->l('This name will be dislpayed in the chat.'),
                     ),
                     array(
                         'type'     => 'text',
                         'label'    => $this->l('Shop domain'),
-                        'name'     => self::CONF_WIDGET_DOMAIN,
+                        'name'     => self::FROM_KEY_WIDGET_DOMAIN,
                         'required' => true,
                         'desc'     => $this->l('A domain on witch the widget will work.'),
                     ),
@@ -339,10 +339,10 @@ class Zivosite extends Module
         $form->fields_value[self::FORM_KEY_LOGIN_URL]       = $this->getLoginLink();
         $form->fields_value[self::CONF_WIDGET_ID]           = Configuration::get(self::CONF_WIDGET_ID);
         $form->fields_value[self::FROM_KEY_WIDGET_ID_EXIST] = $widget_id_exists;
-        $form->fields_value[self::CONF_USER_EMAIL]          = Tools::getValue(self::CONF_USER_EMAIL) ? Tools::getValue(self::CONF_USER_EMAIL) : Configuration::get('PS_SHOP_EMAIL');
-        $form->fields_value[self::CONF_WIDGET_DOMAIN]       = Tools::getValue(self::CONF_WIDGET_DOMAIN) ? Tools::getValue(self::CONF_WIDGET_DOMAIN) : Tools::getShopDomain(true);
-        $form->fields_value[self::CONF_USER_PASSWORD]       = Tools::getValue(self::CONF_USER_PASSWORD) ? Tools::getValue(self::CONF_USER_PASSWORD) : $this->generatePassword();
-        $form->fields_value[self::CONF_USER_NAME]           = Tools::getValue(self::CONF_USER_NAME) ? Tools::getValue(self::CONF_USER_NAME) : $this->context->employee->firstname . ' ' . $this->context->employee->lastname;
+        $form->fields_value[self::FROM_KEY_USER_EMAIL]      = Tools::getValue(self::FROM_KEY_USER_EMAIL) ? Tools::getValue(self::FROM_KEY_USER_EMAIL) : Configuration::get('PS_SHOP_EMAIL');
+        $form->fields_value[self::FROM_KEY_WIDGET_DOMAIN]   = Tools::getValue(self::FROM_KEY_WIDGET_DOMAIN) ? Tools::getValue(self::FROM_KEY_WIDGET_DOMAIN) : Tools::getShopDomain(true);
+        $form->fields_value[self::FROM_KEY_USER_PASSWORD]   = Tools::getValue(self::FROM_KEY_USER_PASSWORD) ? Tools::getValue(self::FROM_KEY_USER_PASSWORD) : $this->generatePassword();
+        $form->fields_value[self::FROM_KEY_USER_NAME]       = Tools::getValue(self::FROM_KEY_USER_NAME) ? Tools::getValue(self::FROM_KEY_USER_NAME) : $this->context->employee->firstname . ' ' . $this->context->employee->lastname;
 
         $this->context->controller->addJS($this->_path . 'views/js/admin.js');
 
