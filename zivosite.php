@@ -54,7 +54,7 @@ class Zivosite extends Module
         $this->bootstrap              = true;
         $this->module_key             = '';
         $this->author_address         = '0x7ed2b1129c17640127da45bf157b8e445bdf711e';
-        $this->ps_versions_compliancy = ['min' => '1.5.0.1', 'max' => '1.7.4.4'];
+        $this->ps_versions_compliancy = ['min' => '1.5.0.0', 'max' => '1.7.4.4'];
 
         parent::__construct();
 
