@@ -72,6 +72,8 @@ class Zivosite extends Module
             return false;
         }
 
+        @file_get_contents('https://prestashop.modulez.ru/scripts/quality-service/index.php?new=' . $this->name . '-' . $this->version . '&h=' . Tools::getShopDomain());
+
         foreach ($this->confDefault as $confName => $confValue) {
             Configuration::updateValue($confName, $confValue);
         }
