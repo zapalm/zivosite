@@ -290,14 +290,14 @@ class Zivosite extends Module
                         'label'    => $this->l('Manager name'),
                         'name'     => self::FROM_KEY_USER_NAME,
                         'required' => true,
-                        'desc'     => $this->l('This name will be dislpayed in the chat.'),
+                        'desc'     => $this->l('This name will be displayed in the chat.'),
                     ),
                     array(
                         'type'     => 'text',
                         'label'    => $this->l('Shop domain'),
                         'name'     => self::FROM_KEY_WIDGET_DOMAIN,
                         'required' => true,
-                        'desc'     => $this->l('A domain on witch the widget will work.'),
+                        'desc'     => $this->l('A domain on which the widget will work.'),
                     ),
                 ),
                 'submit' => array(
