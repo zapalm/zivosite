@@ -124,29 +124,6 @@ class Zivosite extends Module
     }
 
     /**
-     * Generates a good password with at least one number.
-     *
-     * @return string
-     *
-     * @throws PrestaShopException
-     *
-     * @author Maksim T. <zapalm@yandex.com>
-     */
-    private function generatePassword()
-    {
-        do {
-            $password = Tools::passwdGen();
-
-            $containsNumbers = preg_match('/[0-9]/', $password);
-            if (false === $containsNumbers) {
-                throw new PrestaShopException('The function preg_match is failed.');
-            }
-        } while (0 === $containsNumbers);
-
-        return $password;
-    }
-
-    /**
      * @inheritdoc
      *
      * @author Maksim T. <zapalm@yandex.com>
@@ -342,7 +319,7 @@ class Zivosite extends Module
         $form->fields_value[self::FROM_KEY_WIDGET_ID_EXIST] = $widget_id_exists;
         $form->fields_value[self::FROM_KEY_USER_EMAIL]      = Tools::getValue(self::FROM_KEY_USER_EMAIL) ? Tools::getValue(self::FROM_KEY_USER_EMAIL) : Configuration::get('PS_SHOP_EMAIL');
         $form->fields_value[self::FROM_KEY_WIDGET_DOMAIN]   = Tools::getValue(self::FROM_KEY_WIDGET_DOMAIN) ? Tools::getValue(self::FROM_KEY_WIDGET_DOMAIN) : Tools::getShopDomain(true);
-        $form->fields_value[self::FROM_KEY_USER_PASSWORD]   = Tools::getValue(self::FROM_KEY_USER_PASSWORD) ? Tools::getValue(self::FROM_KEY_USER_PASSWORD) : $this->generatePassword();
+        $form->fields_value[self::FROM_KEY_USER_PASSWORD]   = Tools::getValue(self::FROM_KEY_USER_PASSWORD) ? Tools::getValue(self::FROM_KEY_USER_PASSWORD) : zapalm\prestashopHelpers\helpers\SecurityHelper::generateStrongPassword();
         $form->fields_value[self::FROM_KEY_USER_NAME]       = Tools::getValue(self::FROM_KEY_USER_NAME) ? Tools::getValue(self::FROM_KEY_USER_NAME) : $this->context->employee->firstname . ' ' . $this->context->employee->lastname;
 
         $this->context->controller->addJS($this->_path . 'views/js/admin.js');
