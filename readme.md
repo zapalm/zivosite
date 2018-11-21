@@ -46,6 +46,6 @@ Contributors wishing to edit a module's files should follow the following proces
 [1]: http://doc.prestashop.com/display/PS16/Coding+Standards
 [2]: http://doc.prestashop.com/display/PS16/How+to+write+a+commit+message
 [3]: https://help.github.com/articles/using-pull-requests
-[4]: https://prestashop.modulez.ru/en/frontend-features/27-jivosite-live-chat.html
+[4]: https://prestashop.modulez.ru/en/frontend-features/27-jivochat-more-than-live-chat.html
 [5]: https://www.patreon.com/zapalm
 [6]: https://www.jivochat.com/?partner_id=4086

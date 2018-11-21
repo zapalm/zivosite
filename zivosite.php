@@ -4,7 +4,7 @@
  *
  * @author    Maksim T. <zapalm@yandex.com>
  * @copyright 2014 Maksim T.
- * @link      https://prestashop.modulez.ru/en/frontend-features/27-jivosite-live-chat.html The module's homepage
+ * @link      https://prestashop.modulez.ru/en/frontend-features/27-jivochat-more-than-live-chat.html The module's homepage
  * @license   https://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
  */
 
