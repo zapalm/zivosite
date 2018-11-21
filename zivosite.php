@@ -78,7 +78,11 @@ class Zivosite extends Module
             Configuration::updateValue($confName, $confValue);
         }
 
-        return $this->registerHook('displayFooter');
+        if (!$this->registerHook('displayFooter')) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
