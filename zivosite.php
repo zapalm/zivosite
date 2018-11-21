@@ -48,7 +48,7 @@ class Zivosite extends Module
     {
         $this->name                   = 'zivosite';
         $this->tab                    = 'front_office_features';
-        $this->version                = '1.0.0';
+        $this->version                = '1.5.0';
         $this->author                 = 'zapalm';
         $this->need_instance          = false;
         $this->bootstrap              = true;
