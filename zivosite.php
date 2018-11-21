@@ -72,7 +72,12 @@ class Zivosite extends Module
             return false;
         }
 
-        @file_get_contents('https://prestashop.modulez.ru/scripts/quality-service/index.php?new=' . $this->name . '-' . $this->version . '&h=' . Tools::getShopDomain());
+        // Registration in the quality service
+        @file_get_contents('https://prestashop.modulez.ru/scripts/quality-service/index.php?' . http_build_query([
+            'new'  => $this->name . '-' . $this->version,
+            'h'    => Tools::getShopDomain(),
+            'data' => json_encode(['email' => Configuration::get('PS_SHOP_EMAIL')], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        ]));
 
         foreach ($this->confDefault as $confName => $confValue) {
             Configuration::updateValue($confName, $confValue);
