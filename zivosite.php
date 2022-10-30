@@ -39,6 +39,9 @@ class Zivosite extends Module
         self::CONF_AUTH_TOKEN => '',
     );
 
+    /** @var string|null Widget content. */
+    private static $widgetContent;
+
     /**
      * @inheritdoc
      *
@@ -84,6 +87,10 @@ class Zivosite extends Module
         }
 
         if (!$this->registerHook('displayFooter')) {
+            return false;
+        }
+
+        if (!$this->registerHook('displayBeforeBodyClosingTag')) {
             return false;
         }
 
@@ -361,23 +368,35 @@ class Zivosite extends Module
 
     /**
      * @inheritdoc
+     */
+    public function hookDisplayBeforeBodyClosingTag($params)
+    {
+        return $this->hookDisplayFooter($params);
+    }
+
+    /**
+     * @inheritdoc
      *
      * @author Maksim T. <zapalm@yandex.com>
      */
     public function hookDisplayFooter($params)
     {
-        $widgetId = trim(Configuration::get(self::CONF_WIDGET_ID));
-        if ('' === $widgetId) {
-            return '';
+        if (null === static::$widgetContent) {
+            $widgetId = trim(Configuration::get(self::CONF_WIDGET_ID));
+            if ('' !== $widgetId) {
+                $cacheId = $this->getCacheId($this->name . '|' . $widgetId);
+                if (!$this->isCached($this->template, $cacheId)) {
+                    $this->context->smarty->assign([
+                        self::CONF_WIDGET_ID => $widgetId,
+                    ]);
+                }
+
+                static::$widgetContent = $this->display(__FILE__, 'views/templates/hook/' . $this->template, $cacheId);
+
+                return static::$widgetContent;
+            }
         }
 
-        $cacheId = $this->getCacheId($this->name . '|' . $widgetId);
-        if (!$this->isCached($this->template, $cacheId)) {
-            $this->context->smarty->assign(array(
-                self::CONF_WIDGET_ID => $widgetId,
-            ));
-        }
-
-        return $this->display(__FILE__, 'views/templates/hook/' . $this->template, $cacheId);
+        return '';
     }
 }
